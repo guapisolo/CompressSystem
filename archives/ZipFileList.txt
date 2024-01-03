@@ -1,0 +1,3 @@
+1 /home/guapisolo/code/SWExp2/code/testfile/abaabaaba.txt abaabaaba.txt txt guapisolo guapisolo 1704270047 502 41
+2 /home/guapisolo/code/SWExp2/code/testfile/healthylife.gif healthylife.gif gif guapisolo guapisolo 1704265880 502 563215
+3 /home/guapisolo/code/SWExp2/code/testfile/test.pdf test.pdf pdf guapisolo guapisolo 1704170607 502 421215

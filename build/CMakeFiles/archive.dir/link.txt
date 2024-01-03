@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC  -m64 -g  -m64 -shared -Wl,-soname,libarchive.so -o ../lib/libarchive.so CMakeFiles/archive.dir/src/FileAccessor.cc.o CMakeFiles/archive.dir/src/ZipAccessor.cc.o CMakeFiles/archive.dir/src/ZipFileList.cc.o 
