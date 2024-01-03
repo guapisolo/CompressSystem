@@ -1,4 +1,0 @@
-/home/guapisolo/code/SWExp2/code/build/CMakeFiles/edit_cache.dir
-/home/guapisolo/code/SWExp2/code/build/CMakeFiles/rebuild_cache.dir
-/home/guapisolo/code/SWExp2/code/build/CMakeFiles/Demo.dir
-/home/guapisolo/code/SWExp2/code/build/CMakeFiles/archive.dir

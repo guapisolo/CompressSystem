@@ -1,1 +1,0 @@
-/usr/bin/c++   -m64 -g   CMakeFiles/Demo.dir/setup.cpp.o  -o Demo  -Wl,-rpath,/home/guapisolo/code/SWExp2/code/lib ../lib/libarchive.so 
