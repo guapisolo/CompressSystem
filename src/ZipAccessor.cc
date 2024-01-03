@@ -1,16 +1,77 @@
+#include<random>
+#include<queue>
+#include<utility>
+#define test
 #ifdef test
 #include "../include/ZipAccessor.h"
 #else
 #include "ZipAccessor.h"
 #endif
 
-
-int decode()
+void ZipAccessor::dfs(int x)
 {
-    //todo
+    if (x<256)
+    {
+        mpToIssac[x]=tmp;
+        return;
+    }
+    tmp.push_back(0);
+    dfs(son[x][0]);
+    tmp.pop_back();
+    tmp.push_back(1);
+    dfs(son[x][1]);
+    tmp.pop_back();
+}
+void ZipAccessor::encode()
+{
+    for (int i=0;i<256;++i)
+        freq[i]=0;
+    for (auto c:buffer)
+        freq[(unsigned)c]++;
+    std::priority_queue<std::pair<int,int> > pq;
+    for (int i=0;i<256;++i)
+        pq.push({-freq[i],i});
+    for (int i=256;i<511;++i)
+    {
+        // auto [v1,u1]=pq.top();
+        int v1=pq.top().first,u1=pq.top().second;
+        pq.pop();
+        int v2=pq.top().first,u2=pq.top().second;
+        // auto [v2,u2]=pq.top();
+        pq.pop();
+        pq.push({v1+v2,i});
+        son[i][0]=u1;
+        son[i][1]=u2;
+    }
+    tmp.clear();
+    dfs(510);
+    zip.clear();
+    zipLen=0;
+    for (char c:buffer)
+        for (int x:mpToIssac[(unsigned)c])
+        {
+            if (zipLen%8==0)
+                zip.push_back(0);
+            zip.back()<<=1;
+            zip.back()|=x;
+        }
+}
+int ZipAccessor::decode()
+{
     return 0;
 }
-
+void ZipAccessor::en_decry(std::vector<char> &s)
+{
+    int mod=998244353,base=233,x=0;
+    for (char c:s)
+    {
+        int p=(unsigned)c;
+        x=((long long)x*base+p)%mod;
+    }
+    std::mt19937 rnd(x);
+    for (auto &c: buffer)
+        c^=(rnd()&255);
+}
 // 现在 decode 和 encode 还没实现，现在只能对原串操作
 // 注意 vector<char> 和 string 的区别，文件流里有0，所以我都用了 vector<char>实现。string可能会出锅
 int ZipAccessor::openZip()
@@ -40,7 +101,8 @@ void ZipAccessor::closeZip(int writeBack)
         std::cerr << "无法打开文件" << std::endl;
         return;
     }
-    outputFile.write(buffer.data(), buffer.size());
+    encode();
+    outputFile.write(zip.data(), zip.size());
     outputFile.flush();
     outputFile.close();
     buffer.clear(); 
