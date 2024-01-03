@@ -5,6 +5,12 @@
 #endif
 
 
+int decode()
+{
+    //todo
+    return 0;
+}
+
 // 现在 decode 和 encode 还没实现，现在只能对原串操作
 // 注意 vector<char> 和 string 的区别，文件流里有0，所以我都用了 vector<char>实现。string可能会出锅
 int ZipAccessor::openZip()
