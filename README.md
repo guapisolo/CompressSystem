@@ -20,6 +20,12 @@ make
 rm * -rf && cmake .. && make
 ```
 
+执行以下指令来安装bypy以支持百度网盘传输：
+
+```
+pip3 install bypy
+```
+
 待实现的功能：
 
 1. encode 和 decode 。现在的版本是把文件原封不动地拼在一起封到备份文件里。
