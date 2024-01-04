@@ -43,7 +43,7 @@ File FileAccessor::get_info(std::string filePath)
     file.owner = pw->pw_name;
     file.group = gr->gr_name;
 
-    file.time.rawTime = fileInfo.st_mtime;
+    file.time.rawMyTime = fileInfo.st_mtime;
     file.auth = (fileInfo.st_mode & 0777);
     file.size = fileInfo.st_size;
 

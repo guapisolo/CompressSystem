@@ -1,11 +1,11 @@
 #pragma once
 #include <string>
 #include <cstring>
-#include "Time.h"
+#include "MyTime.h"
 
 struct File{
 std::string path, name, type, group, owner;
-Time time;
+MyTime time;
 int auth;
 size_t size;
 char md5[32];

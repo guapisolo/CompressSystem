@@ -20,7 +20,7 @@ void ZipFileList::load()
             continue;
         }
         inputFile >> file.path >> file.name >> file.type >> file.group >> file.owner;
-        inputFile >> file.time.rawTime >> file.auth >> file.size;
+        inputFile >> file.time.rawMyTime >> file.auth >> file.size;
         // inputFile >> file.md5;
         mp[id] = file;
     }
@@ -42,7 +42,7 @@ void ZipFileList::exit()
         outputFile << x.first << " ";
         File file = x.second;
         outputFile << file.path << " " << file.name << " " << file.type << " " << file.group << " " << file.owner << " ";
-        outputFile << file.time.rawTime << " " << file.auth << " " << file.size << std::endl;
+        outputFile << file.time.rawMyTime << " " << file.auth << " " << file.size << std::endl;
         /* file.md5 */ 
     }
     outputFile.close();
