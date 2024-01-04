@@ -12,7 +12,7 @@ int main()
 
     core.load();
     core.unzip_file("/home/guapisolo/code/SWExp2/code/testfile/abaabaaba.txt");
-    core.unzip_file("/home/guapisolo/code/SWExp2/code/testfile/healthylife.gif");
+    // core.unzip_file("/home/guapisolo/code/SWExp2/code/testfile/healthylife.gif");
     core.exit();
     return 0;
 }
