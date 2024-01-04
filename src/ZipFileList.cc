@@ -160,3 +160,51 @@ int ZipFileList::reset_password(std::vector<char> &newpwd, std::vector<char> &ol
     zipAccessor->closeZip(1);
     return 1;
 }
+
+//网盘初始化（如果没有填写API，那么获得和填写API用于传输/如果填写了API那么显示剩余配额）
+void ZipFileList::netDiskInit() 
+{
+    system("bypy info");
+}
+
+//上传本地文件到网盘
+void ZipFileList::netDiskUpload() 
+{
+    if(zipAccessor == NULL){
+        std::cerr << "ZipAccessor未成功初始化" << std::endl;
+    }
+    std::string fileUp("bypy upload "), zipListUp("bypy upload "), confUp("bypy upload ");
+    
+    fileUp += zipAccessor -> filePath;
+    confUp += zipAccessor -> ConfigureFilePath;
+    zipListUp += listPath;
+
+    system(zipListUp.c_str());
+    system(confUp.c_str());
+    system(fileUp.c_str());
+}
+
+//下载网盘备份到本地
+void ZipFileList::netDiskDownload() 
+{
+    if(zipAccessor == NULL){
+        std::cerr << "ZipAccessor未成功初始化" << std::endl;
+    }
+    std::string fileUp("bypy download "), zipListUp("bypy download "), confUp("bypy download ");
+
+    fileUp += FileAccessor::getFileName(zipAccessor -> filePath);
+    confUp += FileAccessor::getFileName(zipAccessor -> ConfigureFilePath);
+    zipListUp += FileAccessor::getFileName(listPath);
+
+    fileUp += " ";
+    confUp += " ";
+    zipListUp += " ";
+
+    fileUp += zipAccessor -> filePath;
+    confUp += zipAccessor -> ConfigureFilePath;
+    zipListUp += listPath;
+
+    system(zipListUp.c_str());
+    system(confUp.c_str());
+    system(fileUp.c_str());
+}

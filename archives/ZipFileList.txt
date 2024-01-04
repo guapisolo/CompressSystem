@@ -1,3 +1,3 @@
-1 /home/guapisolo/code/SWExp2/code/testfile/abaabaaba.txt abaabaaba.txt txt guapisolo guapisolo 1704348245 436 41
-2 /home/guapisolo/code/SWExp2/code/testfile/healthylife.gif healthylife.gif gif guapisolo guapisolo 1704270101 436 563174
-3 /home/guapisolo/code/SWExp2/code/testfile/test.pdf test.pdf pdf guapisolo guapisolo 1704170607 502 421215
+1 /root/CompressSystem/testfile/abaabaaba.txt abaabaaba.txt txt root root 1704382639 420 41
+2 /root/CompressSystem/testfile/healthylife.gif healthylife.gif gif root root 1704382639 420 563174
+3 /root/CompressSystem/testfile/test.pdf test.pdf pdf root root 1704382639 493 421215
