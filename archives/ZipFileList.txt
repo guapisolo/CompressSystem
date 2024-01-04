@@ -1,3 +1,4 @@
-1 /root/CompressSystem/testfile/abaabaaba.txt abaabaaba.txt txt root root 1704382639 420 41
-2 /root/CompressSystem/testfile/healthylife.gif healthylife.gif gif root root 1704382639 420 563174
-3 /root/CompressSystem/testfile/test.pdf test.pdf pdf root root 1704382639 493 421215
+1 /root/CompressSystem/testfile/test.pdf test.pdf pdf root root 1704382639 493 421215
+2 /root/CompressSystem/testfile/a.txt a.txt txt root root 1704382639 493 3
+3 /root/CompressSystem/testfile/abaabaaba.txt abaabaaba.txt txt root root 1704382639 420 41
+4 /root/CompressSystem/testfile/healthylife.gif healthylife.gif gif root root 1704382639 420 563174

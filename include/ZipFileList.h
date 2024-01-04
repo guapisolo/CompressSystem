@@ -29,6 +29,7 @@ std::pair<int,int> calc_offset(int id);
 std::vector<char> ReadFile(int id);
 
 int zip_file(std::string path);
+int zip_file(std::vector<std::string> pathVector);
 int unzip_file(std::string path);
 int unzip_file(std::string path, std::vector<char>& pwd);
 int reset_password(std::vector<char>&newpwd);
