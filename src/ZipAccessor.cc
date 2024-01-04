@@ -92,7 +92,7 @@ void ZipAccessor::en_decry(std::vector<char> &s)
         x=((long long)x*base+p)%mod;
     }
     std::mt19937 rnd(x);
-    for (auto &c: buffer)
+    for (auto &c: zip)
         c^=(rnd()&255);
 }
 // 现在 decode 和 encode 还没实现，现在只能对原串操作
@@ -106,8 +106,14 @@ int ZipAccessor::openZip()
     }
     zip.assign((std::istreambuf_iterator<char>(inputFile)), 
                    std::istreambuf_iterator<char>());
+    if (iscry)
+        en_decry(password);
+    if (!decode())
+    {
+        std::cerr << "压缩配置文件丢失" << std::endl;
+        return 0;
+    }
     inputFile.close();
-    // decode(buffer);
     return 1;
 }
 
@@ -125,6 +131,8 @@ void ZipAccessor::closeZip(int writeBack)
         return;
     }
     encode();
+    if (iscry)
+        en_decry(password);
     outputFile.write(zip.data(), zip.size());
     outputFile.flush();
     outputFile.close();
