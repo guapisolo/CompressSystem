@@ -116,6 +116,16 @@ int ZipFileList::zip_file(std::string path)
     return 1;
 }
 
+//zip_file的多文件版本
+int ZipFileList::zip_file(std::vector<std::string> pathVector)
+{
+    for (auto p : pathVector) {
+        if(!zip_file(p))
+            return 0;
+    }
+    return 1;
+}
+
 int ZipFileList::unzip_file(std::string path)
 {
     std::vector<char> pwd = {};
@@ -170,6 +180,7 @@ void ZipFileList::netDiskInit()
 //上传本地文件到网盘
 void ZipFileList::netDiskUpload() 
 {
+    const bool verbose = 0;
     if(zipAccessor == NULL){
         std::cerr << "ZipAccessor未成功初始化" << std::endl;
     }
@@ -179,14 +190,24 @@ void ZipFileList::netDiskUpload()
     confUp += zipAccessor -> ConfigureFilePath;
     zipListUp += listPath;
 
+    if(!verbose) {
+        fileUp += " > /dev/null 2>&1";
+        confUp += " > /dev/null 2>&1";
+        zipListUp += " > /dev/null 2>&1";
+    }
+
     system(zipListUp.c_str());
+    std::cerr << "元数据Configure上传完成" << std::endl;
     system(confUp.c_str());
+    std::cerr << "元数据ZipFileList上传完成" << std::endl;
     system(fileUp.c_str());
+    std::cerr << "压缩包上传完成" << std::endl;
 }
 
 //下载网盘备份到本地
 void ZipFileList::netDiskDownload() 
 {
+    const bool verbose = 1;
     if(zipAccessor == NULL){
         std::cerr << "ZipAccessor未成功初始化" << std::endl;
     }
@@ -203,6 +224,12 @@ void ZipFileList::netDiskDownload()
     fileUp += zipAccessor -> filePath;
     confUp += zipAccessor -> ConfigureFilePath;
     zipListUp += listPath;
+
+    if(!verbose) {
+        fileUp += " > /dev/null 2>&1";
+        confUp += " > /dev/null 2>&1";
+        zipListUp += " > /dev/null 2>&1";
+    }
 
     system(zipListUp.c_str());
     system(confUp.c_str());

@@ -14,6 +14,10 @@ std::string FileAccessor::getFileName(const std::string& filePath) {
     }
 }
 
+std::string FileAccessor::getAbsolutePath(const std::string& filePath) {
+    return std::filesystem::absolute(filePath).string();
+}
+
 std::string FileAccessor::getFileExtension(const std::string& fileName) {
     // 查找最后一个点号，点号后面是文件后缀
     size_t dotPos = fileName.find_last_of('.');
@@ -76,6 +80,37 @@ int FileAccessor::writeFileStream(const std::string& filePath, std::vector<char>
     outputFile.flush();
     outputFile.close();
     return 1;
+}
+
+//通过正则表达式筛选根目录下文件
+std::vector<std::string> FileAccessor::selectFiles(const std::string& rootPath, const std::string& regex_str)
+{
+    namespace fs = std::filesystem;
+    std::vector<std::string> filteredFiles;
+    std::regex pattern(regex_str);
+
+    try {
+        // 检查路径是否存在并且是一个目录
+        if (fs::exists(rootPath) && fs::is_directory(rootPath)) {
+            // 遍历目录
+            for (const auto& entry : fs::directory_iterator(rootPath)) {
+                const auto& path = entry.path();
+                std::string pathString = path.string();
+                std::string fileName = getFileName(pathString);
+
+                // 如果文件名与正则表达式匹配，则添加到结果列表中
+                if (std::regex_match(fileName, pattern)) {
+                    filteredFiles.push_back(pathString);
+                }
+            }
+        }
+    } catch (const fs::filesystem_error& e) {
+        std::cerr << "Filesystem error: " << e.what() << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "Standard exception: " << e.what() << std::endl;
+    }
+
+    return filteredFiles;
 }
 
 #ifdef test
