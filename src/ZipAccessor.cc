@@ -55,10 +55,33 @@ void ZipAccessor::encode()
             zip.back()<<=1;
             zip.back()|=x;
         }
+    freopen(ConfigureFilePath,"w",stdout);
+    printf("%d\n",zipLen);
+    for (int i=256;i<511;++i)
+        printf("%d %d\n",son[i][0],son[i][1]);
 }
 int ZipAccessor::decode()
 {
-    return 0;
+    freopen(ConfigureFilePath,"r",stdin);
+    if (scanf("%d",&zipLen)==-1)
+        return 0;
+    for (int i=256;i<511;++i)
+        scanf("%d%d",&son[i][0],&son[i][1]);
+    buffer.clear();
+    int p=510;
+    for (int i=0;i<=zipLen/8;++i)
+    {
+        for (int j=((i<zipLen/8)?7:zipLen%8-1);j>=0;--j)
+        {
+            p=son[p][(zip[i]>>j)&1];
+            if (p<256)
+            {
+                buffer.push_back(p);
+                p=510;
+            }
+        }
+    }
+    return 1;
 }
 void ZipAccessor::en_decry(std::vector<char> &s)
 {
@@ -81,7 +104,7 @@ int ZipAccessor::openZip()
         std::cerr << "无法打开文件" << std::endl;
         return 0;
     }
-    buffer.assign((std::istreambuf_iterator<char>(inputFile)), 
+    zip.assign((std::istreambuf_iterator<char>(inputFile)), 
                    std::istreambuf_iterator<char>());
     inputFile.close();
     // decode(buffer);
