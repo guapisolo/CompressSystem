@@ -17,7 +17,10 @@ std::vector<int> mpToIssac[256],tmp;
 int zipLen;
 bool isempty;
 ZipAccessor(){}
-~ZipAccessor(){}
+~ZipAccessor(){
+    inputFile.close();
+    outputFile.close();
+}
 void dfs(int x);
 void encode();
 int decode();
