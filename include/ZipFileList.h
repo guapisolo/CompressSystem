@@ -8,8 +8,8 @@
 #include "ZipAccessor.h"
 #include "FileAccessor.h"
 
-std::vector<char> str_to_vec(std::string &str);
-std::string vec_to_string(std::vector<char> &vec);
+std::vector<char> str_to_vec(std::string str);
+std::string vec_to_string(std::vector<char> vec);
 
 struct ZipFileList{
 std::map<int,File>mp;
@@ -35,8 +35,11 @@ int zip_file(std::string path);
 int zip_file(std::vector<std::string> pathVector);
 int unzip_file(std::string path);
 int unzip_file(std::string path, std::string pwd);
-int reset_password(std::string newpwd);
-int reset_password(std::string newpwd, std::string oldpwd);
+
+int set_password(std::string newpwd);
+int set_password(std::string newpwd, std::string oldpwd);
+int reset_password(std::string oldpwd);
+void update_list();
 
 void netDiskInit();
 void netDiskUpload();

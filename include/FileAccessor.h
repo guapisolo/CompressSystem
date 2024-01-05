@@ -20,5 +20,5 @@ std::string getFileExtension(const std::string& fileName);
 File get_info(std::string filePath);
 std::vector<char> readFileStream(const std::string& filePath);
 int writeFileStream(const std::string& filePath, std::vector<char>&str);
-std::vector<std::string> selectFiles(const std::string& rootPath, const std::string& regex_str);
+std::vector<std::string> selectFiles(const std::string rootPath, const std::string regex_str);
 };

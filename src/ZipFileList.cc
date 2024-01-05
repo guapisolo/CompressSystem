@@ -1,12 +1,12 @@
 #include "ZipFileList.h"
 
 
-std::vector<char> str_to_vec(std::string &str)
+std::vector<char> str_to_vec(std::string str)
 {
     std::vector<char> vec(str.begin(), str.end());
     return vec;
 }
-std::string vec_to_string(std::vector<char> &vec)
+std::string vec_to_string(std::vector<char> vec)
 {
     std::string str(vec.begin(), vec.end());
     return str;
@@ -43,8 +43,8 @@ void ZipFileList::load()
     inputFile.close();
 }
 
-// 退出时保存信息表
-void ZipFileList::exit()
+// 每次都要刷新信息表
+void ZipFileList::update_list()
 {
     outputFile.open(listPath, std::ios::trunc);
     if(zipAccessor->password.size() > 0) { // output password
@@ -61,6 +61,12 @@ void ZipFileList::exit()
         /* file.md5 */ 
     }
     outputFile.close();
+}
+
+// 退出时保存信息表
+void ZipFileList::exit()
+{
+    update_list();
     delete(zipAccessor);
 }
 
@@ -132,6 +138,7 @@ int ZipFileList::zip_file(std::string path)
     auto s = addFile(file, str);
     if(!s) return 0;
     std::cerr << "文件 " << path << " 备份成功" << std::endl;
+    update_list();
     return 1;
 }
 
@@ -147,6 +154,10 @@ int ZipFileList::zip_file(std::vector<std::string> pathVector)
 
 int ZipFileList::unzip_file(std::string path)
 {
+    if(zipAccessor->password.size() > 0){
+        std::cerr << "备份存在密码，需要先输入密码" << std::endl;
+        return 0;
+    }
     std::string pwd = {};
     return unzip_file(path, pwd);
 }
@@ -170,17 +181,17 @@ int ZipFileList::unzip_file(std::string path, std::string pwd)
     return 1;
 }
 
-int ZipFileList::reset_password(std::string newpwd)
+int ZipFileList::set_password(std::string newpwd)
 {
     if(zipAccessor->password.size() != 0) {
         std::cerr << "存在旧密码，必须先输入旧密码才能重置密码" << std::endl; 
         return 0;
     }
     std::string oldpwd;
-    return reset_password(newpwd, oldpwd);
+    return set_password(newpwd, oldpwd);
 }
 
-int ZipFileList::reset_password(std::string npwd, std::string opwd)
+int ZipFileList::set_password(std::string npwd, std::string opwd)
 {
     auto newpwd = str_to_vec(npwd);
     auto oldpwd = str_to_vec(opwd);
@@ -191,6 +202,23 @@ int ZipFileList::reset_password(std::string npwd, std::string opwd)
     zipAccessor->openZip();
     zipAccessor->password = newpwd;
     zipAccessor->closeZip(1);
+    std::cerr << "已经重置密码为" << npwd << std::endl; 
+    update_list();
+    return 1;
+}
+
+int ZipFileList::reset_password(std::string opwd)
+{
+    auto oldpwd = str_to_vec(opwd);
+    if(zipAccessor->password != oldpwd) {
+        std::cerr << "旧密码错误，无法重置密码" << std::endl; 
+        return 0;
+    }
+    zipAccessor->openZip();
+    zipAccessor->password = str_to_vec("");
+    zipAccessor->closeZip(1);
+    std::cerr << "已经解密" << std::endl; 
+    update_list();
     return 1;
 }
 

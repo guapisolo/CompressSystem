@@ -83,7 +83,7 @@ int FileAccessor::writeFileStream(const std::string& filePath, std::vector<char>
 }
 
 //通过正则表达式筛选根目录下文件
-std::vector<std::string> FileAccessor::selectFiles(const std::string& rootPath, const std::string& regex_str)
+std::vector<std::string> FileAccessor::selectFiles(const std::string rootPath, const std::string regex_str)
 {
     namespace fs = std::filesystem;
     std::vector<std::string> filteredFiles;
