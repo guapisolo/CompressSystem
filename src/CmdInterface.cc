@@ -66,7 +66,7 @@ void setup()
             std::cerr << "设置加密  encry [new password]" << std::endl;
             std::cerr << "取消加密  decry [old password]" << std::endl;
             std::cerr << "重置密码  reset [new password] [old password]" << std::endl;
-            std::cerr << "筛选备份  select [folder] [file name (regexp)] [file types split with \'|\'] [creation time (YYYY.MM.DD-YYYY.MM.DD)] [file size (B) (s1-s2)]" << std::endl;
+            std::cerr << "筛选备份  select [folder] [file name (regexp)] [file types split with \'|\'] [last edit time (YYYY.MM.DD-YYYY.MM.DD)] [file size (B) (s1-s2)]" << std::endl;
             std::cerr << "筛选备份中不需要的项用'*'代替" << std::endl;
             std::cerr << "上传备份  upload" << std::endl;
             std::cerr << "下载备份  download" << std::endl;
