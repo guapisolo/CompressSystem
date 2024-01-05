@@ -1,5 +1,9 @@
+#ifdef test
+#include "../include/ZipFileList.h"
+#else
 #include "ZipFileList.h"
-
+#endif
+#include <unistd.h>
 
 std::vector<char> str_to_vec(std::string str)
 {
@@ -150,6 +154,15 @@ int ZipFileList::zip_file(std::vector<std::string> pathVector)
             return 0;
     }
     return 1;
+}
+
+void ZipFileList::auto_zip_file(int t,std::vector<std::string> pathVector)
+{
+    while (true)
+    {
+        sleep(t);
+        zip_file(pathVector);
+    }
 }
 
 int ZipFileList::unzip_file(std::string path)
