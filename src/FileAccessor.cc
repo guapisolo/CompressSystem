@@ -14,6 +14,33 @@ std::string FileAccessor::getFileName(const std::string& filePath) {
     }
 }
 
+time_t FileAccessor::getEditTime(const std::string& filePath) {
+    namespace fs = std::filesystem;
+    // 检查文件是否存在
+    if (fs::exists(filePath) && fs::is_regular_file(filePath)) {
+        // 获取最后修改时间
+        auto ftime = fs::last_write_time(filePath);
+        auto cftime = decltype(ftime)::clock::to_time_t(ftime); // 转换为time_t
+        return cftime;
+    } else {
+        std::cerr << "文件不存在或不是一个普通文件" << std::endl;
+    }
+    exit(0);
+    return 0;
+}
+
+long long FileAccessor::getFileSize(const std::string& filePath) {
+    namespace fs = std::filesystem;
+    // 检查文件是否存在
+    if (fs::exists(filePath) && fs::is_regular_file(filePath)) {
+        // 获取文件大小
+        return (long long)(fs::file_size(filePath));
+    } else {
+        std::cerr << "文件不存在或不是一个普通文件" << std::endl;
+    }
+    return 0;
+}
+
 std::string FileAccessor::getAbsolutePath(const std::string& filePath) {
     return std::filesystem::absolute(filePath).string();
 }
@@ -82,24 +109,45 @@ int FileAccessor::writeFileStream(const std::string& filePath, std::vector<char>
     return 1;
 }
 
-//通过正则表达式筛选根目录下文件
-std::vector<std::string> FileAccessor::selectFiles(const std::string rootPath, const std::string regex_str)
+//通过正则表达式、大小、修改时间等限制筛选根目录下文件
+std::vector<std::string> FileAccessor::selectFiles(const std::string rootPath, const std::string regex_str, time_t timeL, time_t timeR, long long sizeL, long long sizeR)
 {
     namespace fs = std::filesystem;
     std::vector<std::string> filteredFiles;
     std::regex pattern(regex_str);
 
+    std::queue<std::string> path_q;
+    path_q.push(rootPath);
     try {
         // 检查路径是否存在并且是一个目录
-        if (fs::exists(rootPath) && fs::is_directory(rootPath)) {
-            // 遍历目录
-            for (const auto& entry : fs::directory_iterator(rootPath)) {
-                const auto& path = entry.path();
-                std::string pathString = path.string();
-                std::string fileName = getFileName(pathString);
+        while(!path_q.empty()) {
+            std::string nowPath = path_q.front(); // 广度优先搜索
+            path_q.pop();
+            if (fs::exists(nowPath) && fs::is_directory(nowPath)) {
+                // 遍历目录
+                for (const auto& entry : fs::directory_iterator(nowPath)) {
+                    const auto& path = entry.path();
+                    std::string pathString = path.string();
+                    if(fs::is_directory(pathString)) {
+                        path_q.push(pathString);
+                        continue;
+                    }
+                    std::string fileName = getFileName(pathString);
 
-                // 如果文件名与正则表达式匹配，则添加到结果列表中
-                if (std::regex_match(fileName, pattern)) {
+                    time_t editTime = getEditTime(pathString);
+
+                    long long fileSize = getFileSize(pathString);
+                    
+
+                    // 如果文件名与正则表达式不匹配，跳过该文件
+                    if (!std::regex_match(fileName, pattern)) continue;
+                    // 如果文件最后修改时间不在区间内，跳过该文件
+                    if (timeR > 0 && (editTime < timeL || editTime > timeR)) continue;
+                    
+                    // 如果文件大小不在区间内，跳过该文件
+                    // std::cerr << pathString << "  " << fileSize << "  " << sizeL << "  " << sizeR << " " << (fileSize > sizeL) << std::endl;
+                    if (sizeL != -1 && (fileSize < sizeL || fileSize > sizeR)) continue;
+
                     filteredFiles.push_back(pathString);
                 }
             }
