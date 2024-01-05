@@ -6,7 +6,9 @@ void ZipFileList::load()
     inputFile.open(listPath);
     if(!inputFile) {
         std::cerr << "找不到备份表 ZipFileList.txt" << std::endl;
+        inputFile.close();
         std::exit(0);
+        return;
     }
     zipAccessor = new ZipAccessor;
     int id = 0;

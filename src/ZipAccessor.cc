@@ -121,6 +121,7 @@ int ZipAccessor::openZip()
     if (!inputFile)
     {
         std::cerr << "无法打开备份文件Files.zip" << std::endl;
+        inputFile.close();
         return 0;
     }
     zip.assign((std::istreambuf_iterator<char>(inputFile)),
@@ -129,6 +130,7 @@ int ZipAccessor::openZip()
     if (!decode())
     {
         std::cerr << "压缩配置文件丢失" << std::endl;
+        inputFile.close();
         return 0;
     }
     inputFile.close();
@@ -148,6 +150,7 @@ void ZipAccessor::closeZip(int writeBack)
     if (!outputFile)
     {
         std::cerr << "无法打开备份文件Files.zip" << std::endl;
+        outputFile.close();
         return;
     }
     isempty = (buffer.size() == 0);
