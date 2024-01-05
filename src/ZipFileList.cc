@@ -1,5 +1,17 @@
 #include "ZipFileList.h"
 
+
+std::vector<char> str_to_vec(std::string &str)
+{
+    std::vector<char> vec(str.begin(), str.end());
+    return vec;
+}
+std::string vec_to_string(std::vector<char> &vec)
+{
+    std::string str(vec.begin(), vec.end());
+    return str;
+}
+
 // 每次启动程序，读取压缩文件列表信息
 void ZipFileList::load()
 {
@@ -26,6 +38,7 @@ void ZipFileList::load()
         // inputFile >> file.md5;
         mp[id] = file;
     }
+    cnt = id;
     zipAccessor->isempty = (id == 0);
     inputFile.close();
 }
@@ -95,7 +108,10 @@ int ZipFileList::addFile(File file, std::vector<char> &str)
 int ZipFileList::delFile(int id)
 {
     auto info = calc_offset(id);
-    return zipAccessor->del(info.first, info.first + info.second);
+    auto status = zipAccessor->del(info.first, info.first + info.second);
+    if(!status) return 0;
+    mp.erase(id);
+    return 1;
 }
 
 // 每次检查该文件是否在表里存在，如果存在就覆盖成新的备份
@@ -115,6 +131,7 @@ int ZipFileList::zip_file(std::string path)
     // file.md5 = Md5::convert(str);
     auto s = addFile(file, str);
     if(!s) return 0;
+    std::cerr << "文件 " << path << " 备份成功" << std::endl;
     return 1;
 }
 
@@ -130,12 +147,13 @@ int ZipFileList::zip_file(std::vector<std::string> pathVector)
 
 int ZipFileList::unzip_file(std::string path)
 {
-    std::vector<char> pwd = {};
+    std::string pwd = {};
     return unzip_file(path, pwd);
 }
-int ZipFileList::unzip_file(std::string path, std::vector<char> &pwd)
+int ZipFileList::unzip_file(std::string path, std::string pwd)
 {
-    if(pwd != zipAccessor->password){
+    auto password = str_to_vec(pwd);
+    if(password != zipAccessor->password){
         std::cerr << "解压密码错误" << std::endl;
         return 0;
     }
@@ -145,24 +163,27 @@ int ZipFileList::unzip_file(std::string path, std::vector<char> &pwd)
         return 0;
     }
     auto x = calc_offset(id);
-    std::vector<char>str = zipAccessor->query(x.first, x.second);
+    std::vector<char>str = zipAccessor->query(x.first, x.first + x.second);
     auto s = FileAccessor::writeFileStream(path, str);
     if(!s) return 0;
+    std::cerr << "文件 " << path << " 提取成功" << std::endl;
     return 1;
 }
 
-int ZipFileList::reset_password(std::vector<char> &newpwd)
+int ZipFileList::reset_password(std::string newpwd)
 {
     if(zipAccessor->password.size() != 0) {
         std::cerr << "存在旧密码，必须先输入旧密码才能重置密码" << std::endl; 
         return 0;
     }
-    std::vector<char> oldpwd;
+    std::string oldpwd;
     return reset_password(newpwd, oldpwd);
 }
 
-int ZipFileList::reset_password(std::vector<char> &newpwd, std::vector<char> &oldpwd)
+int ZipFileList::reset_password(std::string npwd, std::string opwd)
 {
+    auto newpwd = str_to_vec(npwd);
+    auto oldpwd = str_to_vec(opwd);
     if(zipAccessor->password != oldpwd) {
         std::cerr << "旧密码错误，无法重置密码" << std::endl; 
         return 0;

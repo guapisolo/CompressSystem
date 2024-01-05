@@ -28,10 +28,7 @@ void ZipAccessor::encode()
     for (int i = 0; i < 256; ++i)
         freq[i] = 0;
     int de = 1, cnt = 0;
-    // std::cerr << buffer.size() << std::endl;
     for (auto c : buffer){
-        // cnt++;
-        // std::cerr << cnt << std::endl;
         freq[(unsigned char)c]++;
     }
     std::priority_queue<std::pair<int, int>> pq;
@@ -55,8 +52,6 @@ void ZipAccessor::encode()
     zipLen = 0;
     cnt = 0;
     for (char c : buffer){
-        // cnt++;
-        // std::cerr << cnt << std::endl;
         for (int x : mpToIssac[(unsigned char)c])
         {
             if (zipLen % 8 == 0)
@@ -172,7 +167,7 @@ int ZipAccessor::add(std::vector<char> &str)
     if (str.size() == 0)
         return 0;
     buffer.insert(buffer.end(), str.begin(), str.end());
-    std::cerr << buffer.size() << std::endl;
+    // std::cerr << "压缩文件大小: " << buffer.size() << " bytes" << std::endl;
     closeZip(1);
     return 1;
 }
@@ -196,7 +191,7 @@ int ZipAccessor::del(int L, int R)
 std::vector<char> ZipAccessor::query(int L, int R)
 {
     auto status = openZip();
-    std::cerr << buffer.size() << std::endl;
+    // std::cerr << "压缩文件大小: " << buffer.size() << " bytes" << std::endl;
     std::vector<char> ans;
     if (!status)
         return ans;
