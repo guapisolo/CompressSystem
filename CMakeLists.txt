@@ -41,4 +41,8 @@ target_link_libraries(ZipFileListTest stdc++fs)
 # 链接 Google Test 库
 target_link_libraries(ZipFileListTest ${GTEST_LIBRARIES} pthread)
 
-
+add_executable(CmdInterfaceTest test/CmdInterfaceTest.cpp)
+target_link_libraries(CmdInterfaceTest archive)
+target_link_libraries(CmdInterfaceTest stdc++fs)
+# 链接 Google Test 库
+target_link_libraries(CmdInterfaceTest ${GTEST_LIBRARIES} pthread)
