@@ -1,3 +1,4 @@
+#define test
 #ifdef test
 #include "../include/ZipFileList.h"
 #else
@@ -156,12 +157,14 @@ int ZipFileList::zip_file(std::vector<std::string> pathVector)
     return 1;
 }
 
-void ZipFileList::auto_zip_file(int t,std::vector<std::string> pathVector)
+void ZipFileList::auto_zip_file(int t = 100)
 {
     while (true)
     {
         sleep(t);
-        zip_file(pathVector);
+        for(auto x : mp) {
+            zip_file(x.second.path);
+        }
     }
 }
 
@@ -299,3 +302,47 @@ void ZipFileList::netDiskDownload()
     system(confUp.c_str());
     system(fileUp.c_str());
 }
+
+#ifdef test
+void check_password()
+{
+    ZipFileList zipFileList;;
+    std::cerr<<"check password";
+    std::string c="abc",d="abcd";
+    if (zipFileList.set_password(c)==0)
+    {
+        std::cerr<<"check: fail set password";
+        return;
+    }
+    if (zipFileList.set_password(c)==1)
+    {
+        std::cerr<<"check: double set password";
+        return;
+    }
+    if (zipFileList.set_password(d,d)==1)
+    {
+        std::cerr<<"check: wrong old password";
+        return;
+    }
+    if (zipFileList.set_password(d,c)==1)
+    {
+        std::cerr<<"check: fail reset password";
+        return;
+    }
+    if (zipFileList.set_password(c)==1)
+    {
+        std::cerr<<"check: wrong old password";
+        return;
+    }
+    if (zipFileList.set_password(d)==0)
+    {
+        std::cerr<<"check: fail reset password";
+        return;
+    }
+    std::cerr<<"check: password OK";
+}
+int main()
+{
+    return 0;
+}
+#endif

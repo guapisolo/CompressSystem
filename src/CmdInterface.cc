@@ -119,7 +119,7 @@ void setup()
             core.netDiskInit();
             core.netDiskUpload();
         }else if(cmds[0] == "autoload" && cmds.size() == 1) {
-            // core.auto_load();
+            core.auto_zip_file();
         }else if(cmds[0] == "exit" && cmds.size() == 1) {
             core.exit();
             break;
