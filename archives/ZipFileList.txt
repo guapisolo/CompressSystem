@@ -1,1 +1,1 @@
--1 oldpassword
+-1 newpassword

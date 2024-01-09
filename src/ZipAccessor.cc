@@ -73,8 +73,10 @@ int ZipAccessor::decode()
 {
     if(isempty) return 1;
     FILE* CF = fopen(ConfigureFilePath, "r+");
-    if (fscanf(CF, "%d", &zipLen) == -1)
+    if (fscanf(CF, "%d", &zipLen) == -1){
+        fclose(CF);
         return 0;
+    }
     for (int i = 256; i < 511; ++i)
         fscanf(CF, "%d%d", &son[i][0], &son[i][1]);
     buffer.clear();
