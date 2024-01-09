@@ -35,4 +35,10 @@ target_link_libraries(basicTest stdc++fs)
 # 链接 Google Test 库
 target_link_libraries(basicTest ${GTEST_LIBRARIES} pthread)
 
+add_executable(ZipFileListTest test/ZipFileListTest.cpp)
+target_link_libraries(ZipFileListTest archive)
+target_link_libraries(ZipFileListTest stdc++fs)
+# 链接 Google Test 库
+target_link_libraries(ZipFileListTest ${GTEST_LIBRARIES} pthread)
+
 
