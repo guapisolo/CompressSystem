@@ -8,6 +8,10 @@ set(CMAKE_CXX_STANDARD 17)
 # set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -m64")
 SET(CMAKE_BUILD_TYPE "Debug") 
 
+#添加 gtest
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+
 #添加头文件
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
@@ -23,5 +27,12 @@ add_library(archive SHARED ${SRC})
 add_executable(Demo setup.cpp)
 target_link_libraries(Demo archive)
 target_link_libraries(Demo stdc++fs)
+
+
+add_executable(basicTest test/basicTest.cpp)
+target_link_libraries(basicTest archive)
+target_link_libraries(basicTest stdc++fs)
+# 链接 Google Test 库
+target_link_libraries(basicTest ${GTEST_LIBRARIES} pthread)
 
 
