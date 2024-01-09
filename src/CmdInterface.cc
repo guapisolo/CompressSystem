@@ -118,8 +118,8 @@ void setup()
         }else if(cmds[0] == "download" && cmds.size() == 1) {
             core.netDiskInit();
             core.netDiskUpload();
-        }else if(cmds[0] == "autoload" && cmds.size() == 1) {
-            core.auto_zip_file();
+        }else if(cmds[0] == "autoarch" && cmds.size() == 1) {
+            core.auto_zip_file(100);
         }else if(cmds[0] == "exit" && cmds.size() == 1) {
             core.exit();
             break;

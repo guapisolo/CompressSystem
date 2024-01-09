@@ -1,4 +1,3 @@
-#define test
 #ifdef test
 #include "../include/ZipFileList.h"
 #else
@@ -157,7 +156,7 @@ int ZipFileList::zip_file(std::vector<std::string> pathVector)
     return 1;
 }
 
-void ZipFileList::auto_zip_file(int t = 100)
+void ZipFileList::auto_zip_file(int t)
 {
     while (true)
     {

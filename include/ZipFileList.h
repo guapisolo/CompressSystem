@@ -35,7 +35,7 @@ int zip_file(std::string path);
 int zip_file(std::vector<std::string> pathVector);
 int unzip_file(std::string path);
 int unzip_file(std::string path, std::string pwd);
-void auto_zip_file(int t,std::vector<std::string> pathVector);
+void auto_zip_file(int t);
 
 int set_password(std::string newpwd);
 int set_password(std::string newpwd, std::string oldpwd);
