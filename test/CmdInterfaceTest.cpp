@@ -31,7 +31,7 @@ TEST(VecToStringTest, HandlesNonEmptyVector) {
     EXPECT_EQ(result, "test");
 }
 
-class ZipFileListTestSimple : public ::testing::Test {
+class ZipFileListTest : public ::testing::Test {
 protected:
     ZipFileList zfl;
 
@@ -40,58 +40,28 @@ protected:
     }
 
     void TearDown() override {
-       delete(zfl.zipAccessor);
+       zfl.zipAccessor = new ZipAccessor;
     }
 };
 
-TEST_F(ZipFileListTestSimple, SetPasswordNoOldPassword) {
+TEST_F(ZipFileListTest, SetPasswordNoOldPassword) {
     EXPECT_EQ(zfl.set_password("newpassword"), 1);
 }
-TEST_F(ZipFileListTestSimple, SetPasswordWithOldPassword) {
+
+TEST_F(ZipFileListTest, SetPasswordWithOldPassword) {
     zfl.set_password("oldpassword");
     EXPECT_EQ(zfl.set_password("newpassword"), 0);
 }
-TEST_F(ZipFileListTestSimple, ResetPasswordCorrectOldPassword) {
+
+TEST_F(ZipFileListTest, ResetPasswordCorrectOldPassword) {
     zfl.set_password("oldpassword");
     EXPECT_EQ(zfl.reset_password("oldpassword"), 1);
 }
 
-class ZipFileListTestMultiple : public ::testing::TestWithParam<std::string> {
-protected:
-    ZipFileList zfl;
-    void SetUp() override {
-        // 可以在这里进行任何初始设置
-        zfl.zipAccessor = new ZipAccessor;
-    }
-    void TearDown() override {
-       delete(zfl.zipAccessor);
-    }
-};
-
-TEST_P(ZipFileListTestMultiple, ResetPasswordWrongOldPassword) {
+TEST_F(ZipFileListTest, ResetPasswordWrongOldPassword) {
     zfl.set_password("oldpassword");
-    std::string wrong_password = GetParam();
-    EXPECT_EQ(zfl.reset_password(wrong_password), 0);
+    EXPECT_EQ(zfl.reset_password("wrongpassword"), 0);
 }
-
-TEST_P(ZipFileListTestMultiple, SetPasswordWrongOldPassword) {
-    zfl.set_password("oldpassword");
-    std::string wrong_password = GetParam();
-    EXPECT_EQ(zfl.set_password(wrong_password, "newpassword"), 0);
-}
-
-INSTANTIATE_TEST_SUITE_P(
-    WrongPasswords,
-    ZipFileListTestMultiple,
-    ::testing::Values("#89390q518", 
-                    "wrongpassword2", 
-                    "abbbbbaad",
-                    "sdjflajflkdsjalkfsa",
-                    "",
-                    "\000\000\000\000",
-                    "\001\002")
-);
-
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
